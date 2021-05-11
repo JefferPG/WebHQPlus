@@ -24,12 +24,12 @@ namespace WebHQTest.Controllers
 		}
 
 		[HttpGet]
-		public GeneralResponseViewModel Get([FromForm] UploadRequest requestBody)
+		public GeneralResponseViewModel Get([FromForm] FileRequestViewModel requestBody)
 		{
 			var response = new GeneralResponseViewModel();
 			try
 			{
-				if (requestBody.JsonFile.Length > 0)
+				if (requestBody.File.Length > 0)
 				{
 					string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Files");
 
@@ -38,8 +38,8 @@ namespace WebHQTest.Controllers
 						Directory.CreateDirectory(path);
 					}
 
-					using FileStream stream = new FileStream(Path.Combine(path, requestBody.JsonFile.FileName), FileMode.Create);
-					requestBody.JsonFile.CopyTo(stream);
+					using FileStream stream = new FileStream(Path.Combine(path, requestBody.File.FileName), FileMode.Create);
+					requestBody.File.CopyTo(stream);
 				}
 
 				response.Message = "Task 3 Api";
@@ -53,13 +53,13 @@ namespace WebHQTest.Controllers
 		}
 
 		[HttpGet("{hotelID}/{arrivalDate}")]
-		public Task3ResponseViewModel Get([FromForm] UploadRequest request, string hotelID, string arrivalDate)
+		public Task3ResponseViewModel Get([FromForm] FileRequestViewModel request, string hotelID, string arrivalDate)
 		{
 			var response = new Task3ResponseViewModel();
 
 			try
 			{
-				if (request.JsonFile == null || request.JsonFile.Length == 0)
+				if (request.File == null || request.File.Length == 0)
 				{
 					response.Message = "JsonFile is required.";
 					return response;
@@ -84,7 +84,7 @@ namespace WebHQTest.Controllers
 					Directory.CreateDirectory(path);
 				}
 
-				using var reader = new StreamReader(request.JsonFile.OpenReadStream());
+				using var reader = new StreamReader(request.File.OpenReadStream());
 				var fileContent = reader.ReadToEnd();
 
 				var requestJson = JsonSerializer.Deserialize<List<HotelRatesViewModel>>(fileContent, _serializeOptions);
@@ -102,11 +102,6 @@ namespace WebHQTest.Controllers
 			}
 
 			return response;
-		}
-
-		public class UploadRequest
-		{
-			public IFormFile JsonFile { get; set; }
 		}
 	}
 }

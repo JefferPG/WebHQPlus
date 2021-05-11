@@ -2,9 +2,8 @@
 
 namespace WebHQTest.Models
 {
-	public class Task1RequestViewModel
+	public class Task1RequestViewModel : FileRequestViewModel
 	{
-		public IFormFile File { get; set; }
 		public string Url { get; set; }
 	}
 }

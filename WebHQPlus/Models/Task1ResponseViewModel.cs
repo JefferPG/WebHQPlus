@@ -2,7 +2,7 @@
 
 namespace WebHQTest.Models
 {
-	public class Task1ResponseViewModel
+	public class Task1ResponseViewModel : GeneralResponseViewModel
 	{
 		public Task1ResponseViewModel()
 		{
@@ -10,7 +10,6 @@ namespace WebHQTest.Models
 			Alternative = new List<AlternativeHotel>();
 		}
 
-		public string Message { get; set; }
 		public string Url { get; set; }
 		public string Name { get; set; }
 		public string Address { get; set; }
