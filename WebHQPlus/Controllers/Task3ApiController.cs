@@ -52,8 +52,8 @@ namespace WebHQTest.Controllers
 			return response;
 		}
 
-		[HttpGet("{HotelID}/{ArrivalDate}")]
-		public Task3ResponseViewModel Get([FromForm] UploadRequest request, string HotelID, string ArrivalDate)
+		[HttpGet("{hotelID}/{arrivalDate}")]
+		public Task3ResponseViewModel Get([FromForm] UploadRequest request, string hotelID, string arrivalDate)
 		{
 			var response = new Task3ResponseViewModel();
 
@@ -65,13 +65,13 @@ namespace WebHQTest.Controllers
 					return response;
 				}
 
-				if (HotelID == null || HotelID.Trim().Equals("") || !int.TryParse(HotelID, out int numericValue))
+				if (hotelID == null || hotelID.Trim().Equals("") || !int.TryParse(hotelID, out int numericValue))
 				{
 					response.Message = "HotelID is a numeric required.";
 					return response;
 				}
 
-				if (ArrivalDate == null || ArrivalDate.Trim().Equals("") || !DateTime.TryParse(ArrivalDate, out _))
+				if (arrivalDate == null || arrivalDate.Trim().Equals("") || !DateTime.TryParse(arrivalDate, out _))
 				{
 					response.Message = "ArrivalDate is date formet (yyyy-mm-dd) required.";
 					return response;
@@ -88,10 +88,10 @@ namespace WebHQTest.Controllers
 				var fileContent = reader.ReadToEnd();
 
 				var requestJson = JsonSerializer.Deserialize<List<HotelRatesViewModel>>(fileContent, _serializeOptions);
-				response.FilterList = requestJson.FindAll(h => h.Hotel.HotelID == int.Parse(HotelID));
+				response.FilterList = requestJson.FindAll(h => h.Hotel.HotelID == int.Parse(hotelID));
 				foreach (HotelRatesViewModel hotel in response.FilterList)
 				{
-					hotel.HotelRates = hotel.HotelRates.Where(s => DateTime.Parse(s.TargetDay).Date == DateTime.Parse(ArrivalDate).Date);
+					hotel.HotelRates = hotel.HotelRates.Where(s => DateTime.Parse(s.TargetDay).Date == DateTime.Parse(arrivalDate).Date);
 				}
 
 				response.Message = "Success!";
